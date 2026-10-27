@@ -1,0 +1,13 @@
+# Segredos
+.env
+.env.*
+!.env.example
+
+# Dependências e builds
+.venv/
+__pycache__/
+node_modules/
+.next/
+
+# Dados reais
+*.pdf
