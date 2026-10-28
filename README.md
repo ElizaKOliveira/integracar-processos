@@ -1,20 +1,31 @@
-# integracar-processos
-Aplicação feita para facilitar a organização de dados dos processos do projeto IntegraCAR.
-## Resultados e impacto de integracar-processos
+# Leitor de Capas de Processo — Simlam/CAR
 
-A aplicação foi desenvolvida para otimizar a autuação de processos ambientais, reduzindo o trabalho manual de transcrição de informações das capas dos processos para o sistema de destino.
+Aplicação web para automatizar a leitura de capas de processos ambientais, permitindo revisar os dados extraídos e exportá-los para uma planilha.
 
-Antes da automação, o preenchimento manual levava aproximadamente **30 minutos por processo**. Com o auxílio da extração automatizada de dados, esse tempo passou para **até 10 minutos**, representando uma redução de pelo menos **66,7% no tempo de execução**.
+## Funcionalidades
 
-| Indicador | Antes | Depois |
-|---|---:|---:|
-| Tempo por processo | ~30 min | Até 10 min |
-| Redução de tempo | — | ≥ 66,7% |
-| Trabalho manual de transcrição | Predominante | Reduzido |
+- **Extração de texto (OCR):** leitura de capas de processos em PDF e imagens.
+- **Revisão dos dados:** visualização e edição dos campos extraídos antes de salvar.
+- **Exportação de dados:** armazenamento local em CSV.
+- **Integração com Google Sheets:** opção de registrar os resultados diretamente em uma planilha.
+- **Execução local:** processamento dos documentos no próprio computador.
 
-Além de agilizar o fluxo de trabalho, a solução facilita a organização das informações extraídas e permite dedicar menos tempo à transcrição manual dos dados.
+## Tecnologias
 
+- **Frontend:** Next.js e TypeScript.
+- **Backend:** Python e FastAPI.
+- **OCR:** Tesseract.
+- **Infraestrutura:** Docker e Docker Compose.
+- **Integração opcional:** Google Apps Script e Google Sheets.
 
-## To do:
--  Implementar design planejado
-- Publicar README atualizado
+## Documentação
+
+Consulte o manual para obter instruções de instalação e utilização:
+
+**[📖 Manual de instalação e uso](docs/installation.md)**
+
+O manual contém instruções específicas para Windows e Linux, além de orientações para atualização e solução de problemas.
+
+## Privacidade
+
+O processamento OCR ocorre localmente. Na configuração padrão, os resultados são armazenados em um arquivo CSV. A integração com o Google Sheets é opcional.

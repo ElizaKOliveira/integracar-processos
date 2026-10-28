@@ -1,8 +1,8 @@
 "use client";
-
 import { useState } from "react";
 import UploadArea from "@/components/UploadArea";
 import FormularioRevisao from "@/components/FormularioRevisao";
+import ThemeToggle from "@/components/ThemeToggle";
 import { extrairCampos, enviarParaPlanilha } from "@/lib/api";
 import { CAMPOS_VAZIOS, type Campos } from "@/lib/types";
 
@@ -30,7 +30,6 @@ export default function Home() {
     setEtapa("lendo");
     setNomeOriginal(arquivo.name);
     setPreviewUrl(arquivo.type.startsWith("image/") ? URL.createObjectURL(arquivo) : null);
-
     try {
       setCampos(await extrairCampos(arquivo));
       setEtapa("revisando");
@@ -46,7 +45,7 @@ export default function Home() {
     try {
       await enviarParaPlanilha(campos);
       setConcluidos((n) => n + 1);
-      limparTela(); 
+      limparTela();
     } catch (e) {
       setErro(e instanceof Error ? e.message : "Falha ao enviar para a planilha.");
     } finally {
@@ -55,14 +54,31 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl p-6">
-      <header className="mb-6 flex items-baseline justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Leitor de capas de processo</h1>
-        <span className="text-sm text-gray-500">Concluídos nesta sessão: {concluidos}</span>
+    <main className="mx-auto w-full max-w-5xl px-6 py-12 sm:py-16">
+      <header className="mb-10 flex flex-col gap-4 border-b border-linha pb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="mb-2 text-xs font-medium uppercase tracking-[0.25em] text-verde-suave">
+            IntegraCAR
+          </p>
+          <h1 className="font-serif text-3xl font-medium tracking-tight text-verde sm:text-4xl">
+            Leitor de capas de processo
+          </h1>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 rounded-full border border-linha bg-bege-claro px-4 py-1.5 text-sm text-verde-medio">
+            <span className="h-1.5 w-1.5 rounded-full bg-verde-medio" />
+            Concluídos nesta sessão
+            <span className="font-serif text-base font-semibold text-verde">{concluidos}</span>
+          </div>
+          <ThemeToggle />
+      </div>
       </header>
 
       {erro && (
-        <div className="mb-4 rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700">
+        <div
+          role="alert"
+          className="mb-6 rounded-xl border border-erro/30 bg-erro-bg px-4 py-3 text-sm text-erro"
+        >
           {erro}
         </div>
       )}
@@ -70,25 +86,38 @@ export default function Home() {
       {etapa === "aguardando" && <UploadArea aoEscolher={aoEscolherArquivo} />}
 
       {etapa === "lendo" && (
-        <div className="rounded-xl border bg-white p-12 text-center text-gray-600">
-          Lendo <strong>{nomeOriginal}</strong>... isto pode levar alguns segundos.
+        <div className="flex flex-col items-center rounded-2xl border border-linha bg-bege-claro px-6 py-20 text-center">
+          <span
+            aria-hidden
+            className="mb-6 h-9 w-9 animate-spin rounded-full border-2 border-linha border-t-verde"
+          />
+          <p className="text-verde-medio">
+            Lendo <strong className="font-semibold text-verde">{nomeOriginal}</strong>...
+          </p>
+          <p className="mt-1 text-sm text-verde-suave">Isto pode levar alguns segundos.</p>
         </div>
       )}
 
       {etapa === "revisando" && (
         <div className="grid gap-6 md:grid-cols-2">
-          <section className="rounded-xl border bg-white p-4">
-            <p className="mb-2 truncate text-sm text-gray-500">{nomeOriginal}</p>
+          <section className="self-start rounded-2xl border border-linha bg-bege-claro p-5 shadow-[0_1px_0_rgba(28,58,46,0.04)]">
+            <p className="mb-3 truncate text-xs font-medium uppercase tracking-widest text-verde-suave">
+              {nomeOriginal}
+            </p>
             {previewUrl ? (
-              <img src={previewUrl} alt="Capa enviada" className="w-full rounded" />
+              <img
+                src={previewUrl}
+                alt="Capa enviada"
+                className="w-full rounded-lg border border-linha"
+              />
             ) : (
-              <p className="text-sm text-gray-400">
+              <div className="rounded-lg border border-dashed border-linha bg-bege px-4 py-12 text-center text-sm text-verde-suave">
                 Pré-visualização indisponível para PDF. Confira no arquivo original.
-              </p>
+              </div>
             )}
           </section>
 
-          <section className="rounded-xl border bg-white p-4">
+          <section className="rounded-2xl border border-linha bg-bege-claro p-6 shadow-[0_1px_0_rgba(28,58,46,0.04)]">
             <FormularioRevisao
               campos={campos}
               aoMudar={setCampos}
@@ -97,7 +126,7 @@ export default function Home() {
             />
             <button
               onClick={limparTela}
-              className="mt-3 w-full text-sm text-gray-500 underline hover:text-gray-700"
+              className="mt-4 w-full text-sm text-verde-suave underline-offset-4 transition hover:text-verde hover:underline"
             >
               Descartar e escolher outro arquivo
             </button>
