@@ -4,13 +4,13 @@ import path from "node:path";
 
 
 const CHAVES = [
-  "nome_arquivo", "processo_nome", "processo_simlam", "pessoa", "cpf",
-  "data", "origem", "qnt_folhas", "processo_edocs", "num_registro",
+  "nome_arquivo", "processo_nome", "processo_simlam", "interessado", "cpf",
+  "data", "origem", "qnt_folhas", "processo_edocs", "registro",
 ] as const;
 
 const CABECALHOS = [
-  "Nome do arquivo", "Processo nome", "Processo Simlam", "Pessoa", "CPF",
-  "Data", "Origem", "Qnt folhas", "Processo E-DOCS", "Num. Registro", "Status",
+  "Nome do arquivo", "Processo nome", "Processo Simlam", "Interessado", "CPF",
+  "Data", "Origem", "Qnt folhas", "Processo E-DOCS", "Registro Termo", "Status",
 ];
 const STATUS_PADRAO = "Falta imprimir";
 
@@ -50,7 +50,6 @@ async function enviarParaSheets(url: string, token: string, campos: Record<strin
 }
 
 export async function POST(req: Request) {
-  // 1) Validação (igual a antes)
   const corpo = await req.json().catch(() => null);
   if (!corpo || typeof corpo !== "object") {
     return NextResponse.json({ erro: "Corpo inválido." }, { status: 400 });
