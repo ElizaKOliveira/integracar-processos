@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Uso:  python scripts/smoke_test.py caminho\\para\\LeitorDeProcessos.exe
-Falha (código 1) com uma mensagem clara se algo estiver errado.
-"""
 import subprocess
 import sys
 import tempfile
@@ -30,7 +26,6 @@ def fonte(tamanho: int):
 
 
 def criar_capa(destino: Path) -> None:
-    """Capa FICTÍCIA (nenhum dado real)."""
     img = Image.new("RGB", (1500, 700), "white")
     d = ImageDraw.Draw(img)
     linhas = [
@@ -49,7 +44,7 @@ def criar_capa(destino: Path) -> None:
 
 
 def esperar_servidor() -> None:
-    for _ in range(120):  # até ~60 s
+    for _ in range(120):  
         try:
             if httpx.get(f"{URL}/api/health", timeout=2).json().get("app") == "leitor-processos":
                 return
@@ -59,7 +54,32 @@ def esperar_servidor() -> None:
     falhar("o servidor não respondeu em 60 segundos.")
 
 
+def conferir_campos(origem: str, campos: dict) -> None:
+    esperado = {
+        "processo_simlam": "12345/2020",
+        "cpf": "000.000.000-00",
+        "data": "30/12/2020",
+    }
+    for chave, valor in esperado.items():
+        if campos.get(chave) != valor:
+            falhar(f"[{origem}] campo '{chave}': esperado '{valor}', veio '{campos.get(chave)}'. Campos: {campos}")
+
+    if "98765" not in campos.get("nome_arquivo", ""):
+        falhar(f"[{origem}] código 98765 não apareceu em 'nome_arquivo'. Campos: {campos}")
+
+    nome = campos.get("interessado")
+    if nome != "Fulano de Tal":
+        print(f"   aviso: nome do interessado veio '{nome}' (esperado 'Fulano de Tal')")
+    if campos.get("origem") != "Domingos Martins":
+        print(f"   aviso: origem veio '{campos.get('origem')}' (esperado 'Domingos Martins')")
+
+
 def main() -> None:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")  
+    except Exception:
+        pass
+
     if len(sys.argv) != 2:
         falhar("uso: python scripts/smoke_test.py <caminho do LeitorDeProcessos.exe>")
     exe = sys.argv[1]
@@ -82,25 +102,22 @@ def main() -> None:
         print(f"3. Tesseract embutido OK (versão {diag.get('versao')})")
 
         with tempfile.TemporaryDirectory() as tmp:
-            capa = Path(tmp) / "capa.png"
-            criar_capa(capa)
-            with open(capa, "rb") as f:
-                resp = httpx.post(f"{URL}/api/extract", files={"arquivo": ("capa.png", f, "image/png")}, timeout=120)
-        if resp.status_code != 200:
-            falhar(f"leitura da capa deu erro {resp.status_code}: {resp.text}")
-        campos = resp.json()["campos"]
+            png = Path(tmp) / "capa.png"
+            pdf = Path(tmp) / "capa.pdf"
+            criar_capa(png)
+            Image.open(png).convert("RGB").save(pdf, "PDF", resolution=300)
 
-        esperado = {"numero": "12345", "ano": "2020", "codigo": "98765",
-                    "cpf": "000.000.000-00", "data": "30/12/2020"}
-        for chave, valor in esperado.items():
-            if campos.get(chave) != valor:
-                falhar(f"campo '{chave}': esperado '{valor}', veio '{campos.get(chave)}'. Campos: {campos}")
-        print("4. leitura da capa OK")
-
-        # Nomes variam um pouco conforme a fonte: só avisamos, não reprovamos.
-        for chave, valor in {"pessoa": "Fulano de Tal", "origem": "Domingos Martins"}.items():
-            if campos.get(chave) != valor:
-                print(f"   aviso: '{chave}' veio '{campos.get(chave)}' (esperado '{valor}')")
+            for arquivo, tipo in ((png, "image/png"), (pdf, "application/pdf")):
+                with open(arquivo, "rb") as f:
+                    resp = httpx.post(
+                        f"{URL}/api/extract",
+                        files={"arquivo": (arquivo.name, f, tipo)},
+                        timeout=120,
+                    )
+                if resp.status_code != 200:
+                    falhar(f"leitura de {arquivo.name} deu erro {resp.status_code}: {resp.text}")
+                conferir_campos(arquivo.name, resp.json()["campos"])
+                print(f"4. leitura de {arquivo.suffix} OK")
 
         print("TUDO CERTO")
     finally:
