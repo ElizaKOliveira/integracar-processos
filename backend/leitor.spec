@@ -6,6 +6,7 @@ from PyInstaller.utils.hooks import collect_submodules
 PASTA_BACKEND = Path(SPECPATH)
 SITE = PASTA_BACKEND.parent / "frontend" / "out"
 TESSERACT = PASTA_BACKEND / "vendor" / "tesseract"
+ICONE = PASTA_BACKEND.parent / "installer" / "icone.ico"
 
 if not (SITE / "index.html").exists():
     raise SystemExit("Site não encontrado. Rode 'npm run build' em frontend/ antes (com NEXT_PUBLIC_API_URL vazio).")
@@ -33,6 +34,6 @@ exe = EXE(
     name="LeitorDeProcessos",
     console=True,   
     upx=False,      
-    icon=None,      
+    icon=str(ICONE) if ICONE.exists() else None,
 )
 coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="LeitorDeProcessos")

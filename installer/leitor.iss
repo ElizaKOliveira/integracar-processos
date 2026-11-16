@@ -16,6 +16,10 @@ SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
 UninstallDisplayName=Leitor de Processos
+#if FileExists("icone.ico")
+SetupIconFile=icone.ico
+#endif
+UninstallDisplayIcon={app}\LeitorDeProcessos.exe
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
