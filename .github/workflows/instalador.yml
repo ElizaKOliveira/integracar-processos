@@ -61,11 +61,14 @@ jobs:
           name: instalador-windows
           path: installer/Output/*.exe
 
-      - name: Publicar release (só quando há tag)
+      - name: Publicar release (com tag)
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $arquivo = (Get-ChildItem installer\Output\*.exe | Select-Object -First 1).FullName
-          $hash = (Get-FileHash $arquivo -Algorithm SHA256).Hash
-          gh release create "$env:GITHUB_REF_NAME" "$arquivo" --title "Leitor de Processos $env:GITHUB_REF_NAME" --notes "SHA-256 do instalador: $hash"
+          $versionado = (Get-ChildItem installer\Output\*.exe | Select-Object -First 1).FullName
+          # Cópia com nome FIXO: permite um link de download que nunca muda.
+          $fixo = Join-Path (Split-Path $versionado) "Setup-LeitorDeProcessos.exe"
+          Copy-Item $versionado $fixo
+          $hash = (Get-FileHash $versionado -Algorithm SHA256).Hash
+          gh release create "$env:GITHUB_REF_NAME" "$versionado" "$fixo" --title "Leitor de Processos $env:GITHUB_REF_NAME" --notes "SHA-256 do instalador: $hash"
