@@ -22,7 +22,7 @@ Aplicação web para automatizar a leitura de capas de processos ambientais, per
 
 | Sistema | Como |
 |---|---|
-| **Windows 10/11** | Baixe o instalador em [Releases](../../releases/latest) e siga o guia de instalação no site do projeto: COLE-AQUI-O-LINK-DO-GUIA |
+| **Windows 10/11** | Baixe o instalador em [Releases](../../releases/latest) e siga o guia de instalação no site do projeto: https://leitorprocessos.vercel.app/ |
 | **Linux** | Roda com Docker: `git clone`, depois `docker compose up -d --build` e abra <http://127.0.0.1:3000>. Passo a passo no mesmo guia (aba Linux). |
 
 O instalador do Windows instala só para o usuário (não pede administrador), cria um atalho e **não apaga os dados** ao atualizar ou desinstalar.
@@ -55,7 +55,7 @@ A ordem de busca do Tesseract é: `TESSERACT_CMD` → pasta embutida `vendor/tes
 
 Cada usuário usa uma cópia da planilha modelo, que já contém o script. O código está em [`apps-script/Codigo.gs`](apps-script/Codigo.gs). Ele grava na primeira aba, tem o comando de teste de conexão (`ping`) e o token é opcional. O passo a passo para o usuário está no guia de instalação.
 
-Cabeçalho esperado na linha 1 (colunas A a K): `Nome do arquivo`, `Processo nome`, `Processo Simlam`, `Pessoa`, `CPF`, `Data`, `Origem`, `Qnt folhas`, `Processo E-DOCS`, `Num. Registro`, `Status`.
+Cabeçalho esperado na linha 1 (colunas A a K): `Nome do arquivo`, `Processo nome`, `Processo Simlam`, `Interessado`, `CPF`, `Data`, `Origem`, `Qnt folhas`, `Processo E-DOCS`, `Registro`, `Status`.
 
 ## Desenvolvimento
 
