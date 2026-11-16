@@ -1,21 +1,8 @@
 services:
-  backend:
-    build: ./backend
+  app:
+    build: .
     environment:
-      ALLOWED_ORIGIN: http://127.0.0.1:3000
-    ports:
-      - "127.0.0.1:8000:8000"
-    restart: unless-stopped
-
-  frontend:
-    build: ./frontend
-    environment:
+      DADOS_DIR: /app/dados
+      CONFIG_DIR: /app/dados/config
       APPS_SCRIPT_URL: ${APPS_SCRIPT_URL:-}
       APPS_SCRIPT_TOKEN: ${APPS_SCRIPT_TOKEN:-}
-    volumes:
-      - ./dados:/app/dados   
-    ports:
-      - "127.0.0.1:3000:3000"
-    depends_on:
-      - backend
-    restart: unless-stopped

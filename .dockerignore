@@ -1,0 +1,12 @@
+.git
+**/node_modules
+**/.next
+frontend/out
+**/.venv
+**/__pycache__
+**/.env
+**/.env.*
+dados
+*.pdf
+teste.png
+backend/vendor/

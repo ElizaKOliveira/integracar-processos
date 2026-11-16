@@ -1,0 +1,17 @@
+LEITOR DE PROCESSOS - AVISOS DE LICENÇAS DE TERCEIROS
+
+Este programa inclui componentes de terceiros. Este arquivo é um resumo
+informativo e não substitui os textos oficiais de cada licença.
+
+- Tesseract OCR ............ Apache License 2.0 (https://github.com/tesseract-ocr/tesseract)
+- Leptonica ................ licença BSD-2 (http://www.leptonica.org)
+- Bibliotecas que acompanham o Tesseract (pasta vendor\tesseract): licenças
+  diversas, algumas LGPL (por exemplo libunistring e libintl). Essas
+  bibliotecas são arquivos .dll separados e podem ser substituídos.
+- pypdfium2 / PDFium ....... BSD-3-Clause e Apache-2.0 (https://github.com/pypdfium2-team/pypdfium2)
+- Python .................. Python Software Foundation License
+- FastAPI, Starlette, Uvicorn, Pydantic, httpx ... licenças MIT / BSD
+- Pillow ................... licença HPND
+- Next.js e React .......... MIT
+
+O texto completo de cada licença está nos respectivos projetos.

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import UploadArea from "@/components/UploadArea";
 import FormularioRevisao from "@/components/FormularioRevisao";
+import Configuracoes from "@/components/Configuracoes";
 import ThemeToggle from "@/components/ThemeToggle";
 import { extrairCampos, enviarParaPlanilha } from "@/lib/api";
 import { CAMPOS_VAZIOS, type Campos } from "@/lib/types";
@@ -71,6 +72,7 @@ export default function Home() {
             <span className="font-serif text-base font-semibold text-verde">{concluidos}</span>
           </div>
           <ThemeToggle />
+          <Configuracoes/>
       </div>
       </header>
 

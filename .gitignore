@@ -9,3 +9,7 @@ node_modules/
 
 *.pdf
 dados/
+
+backend/vendor/
+backend/build/
+backend/dist/
